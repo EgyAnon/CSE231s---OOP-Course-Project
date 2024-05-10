@@ -1,6 +1,6 @@
 import Interfaces.*;
 import java.time.LocalDateTime;
-import Utility.Utility;
+import Utility.*;
 
 @SuppressWarnings("unused")
 abstract class Item{
@@ -8,13 +8,28 @@ abstract class Item{
     private double unit_price;
     private int available_quantity;
     
-    Item(String name, double unit_price, int initialQuantity){
+    public String getName(){
+        return name;
+    }
+
+    public int getAvailableQuantity(){
+        return available_quantity;
+    }
+    public void removeQuantity(int quantity){
+        available_quantity-=quantity;
+    }
+
+    public void addQuantity(int quantity){
+        available_quantity+=quantity;
+    }
+
+    public Item(String name, double unit_price, int initialQuantity){
         this.name = name;
         this.unit_price = unit_price;
         this.available_quantity = initialQuantity;
     }
     
-    private Item(){
+    Item(){
         this("IPSUMLOREM",1,1);
     }
 
@@ -48,6 +63,7 @@ abstract class Expirable extends Item{
         expiryDate = getCustomDate(expiryMonth,expiryDay,23,59);
     }
 
+    @SuppressWarnings("static-access")
     static LocalDateTime getCustomDate(int expiryMonth, int expiryDay, int expiryHour, int expiryMinute) {
         LocalDateTime CustomDate = LocalDateTime.now();
         CustomDate = CustomDate.of(CustomDate.getYear(), expiryMonth, expiryDay, expiryHour, expiryMinute);
@@ -72,7 +88,9 @@ class Food extends Expirable{
     int expiryMonth, int expiryDay){
         super(foodName,unitPrice,initialQuantity,expiryMonth,expiryDay);
     }
-
+    Food(String foodName,double unitPrice, int initialQuantity){
+        super(foodName,unitPrice,initialQuantity,5,29);
+    }
     Food(){ //create a random food item
         this(Utility.getRandomString(10),Utility.getRandomPrice(),10,5,29);
     }
@@ -82,7 +100,7 @@ class Tool extends Item{
     Tool(String foodName,double unitPrice, int initialQuantity){
         super(foodName,unitPrice,initialQuantity);
     }
-    Tool(){ //create a random food item
+    Tool(){ //create a random Tool item
         this(Utility.getRandomString(10),Utility.getRandomPrice(),10);
     }
 }
