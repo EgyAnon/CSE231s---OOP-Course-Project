@@ -9,7 +9,6 @@ public class Order {
     }
 
     public void addProduct(Item I, int quantity){
-       // Pair<Item, Integer> x = new Pair<Item, Integer>(I,quantity);
         orderContent.add(new Pair<Item,Integer>(I,quantity));
         totalPrice += I.calculate_price(quantity);
     }

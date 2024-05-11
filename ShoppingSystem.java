@@ -7,7 +7,6 @@ public class ShoppingSystem {
     private int tempInt;
     private double tempDouble;
     private String tempString;
-    private HashMap<String, Item> warehouse;
     private HashMap<String, Item> FoodItems;
     private HashMap<String, Item> ToolItems;
     private HashMap<String, Item> CosmeticItems;
@@ -18,10 +17,10 @@ public class ShoppingSystem {
 
     public ShoppingSystem() {
         CustomerDatabase = new HashMap<String, Customer>();
-        //FoodItems = new HashMap<String, Item>();
-        //ToolItems = new HashMap<String, Item>();
-        //CosmeticItems = new HashMap<String, Item>();
-        warehouse = new HashMap<String, Item>();
+        FoodItems = new HashMap<String, Item>();
+        ToolItems = new HashMap<String, Item>();
+        CosmeticItems = new HashMap<String, Item>();
+        // warehouse = new HashMap<String, Item>();
         iScanner = new Scanner(System.in);
         tempInt = 0;
         // Initialize();
@@ -91,8 +90,7 @@ public class ShoppingSystem {
         tempString = iScanner.nextLine();
         if (!tempString.equals(employeePassword)) {
             System.out.println("Incorrect employee password.");
-        } 
-        else {
+        } else {
             while (tempInt != 3) {
                 System.out.println("==========Employee Dashbord==========");
                 System.out.println("1. Modify Products");
@@ -116,9 +114,58 @@ public class ShoppingSystem {
 
     }
 
-    private void modifyProductsMenu(){
-        Scanner.out.println("Enter Product name:")
+    private boolean checkIfContains(HashMap<String, Item> map, String itemName) {
+        return map.containsKey(itemName);
     }
+
+    private void modifyProductsMenu() {
+        System.out.println("What is the type of the product you wish to modify?");
+        System.out.print("1. Food\n2. Tools\n3. Cosmetics");
+        int tempType = iScanner.nextInt();
+        if (tempType > 3 || tempType < 1) {
+            printErrorMessage();
+            return;
+        }
+
+        System.out.print("Enter Product name:");
+        tempString = iScanner.nextLine();
+        tempString = iScanner.nextLine();
+
+        System.out.print("How many units do you want to add? ");
+        tempInt = iScanner.nextInt();
+
+        switch (tempType) {
+            case 1:
+                if (checkIfContains(FoodItems, tempString)) {
+                    FoodItems.get(tempString).addQuantity(tempInt);
+                    System.out.println("Added " + tempInt + " units to " + tempString + "successfully.");
+                } else {
+                    System.out.println("This item does not exist.");
+                }
+                break;
+                case 2:
+                if (checkIfContains(ToolItems, tempString)) {
+                    ToolItems.get(tempString).addQuantity(tempInt);
+                    System.out.println("Added " + tempInt + " units to " + tempString + "successfully.");
+                } else {
+                    System.out.println("This item does not exist.");
+                }
+                break;
+                case 3:
+                if (checkIfContains(CosmeticItems, tempString)) {
+                    CosmeticItems.get(tempString).addQuantity(tempInt);
+                    System.out.println("Added " + tempInt + " units to " + tempString + "successfully.");
+                } else {
+                    System.out.println("This item does not exist.");
+                }
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
     private void addProductMenu() {
         int switchInt;
         System.out.print("Enter product name: ");
@@ -155,13 +202,12 @@ public class ShoppingSystem {
                 break;
         }
     }
-    
+
     private void addProduct(HashMap<String, Item> itemMap, Item I) {
-        if(itemMap.containsKey(I.getName())){
+        if (itemMap.containsKey(I.getName())) {
             itemMap.get(I.getName()).addQuantity(I.getAvailableQuantity());
             System.out.println("Quantity updated to " + itemMap.get(I.getName()).getAvailableQuantity());
-        }
-        else{
+        } else {
             itemMap.put(I.getName(), I);
             System.out.println("Item: " + I.getName() + " Added Successfully");
         }
