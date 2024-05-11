@@ -1,5 +1,6 @@
 import java.util.*;
 import Utility.*;
+import java.util.InputMismatchException;
 
 @SuppressWarnings("unused")
 public class ShoppingSystem {
@@ -90,26 +91,34 @@ public class ShoppingSystem {
         tempString = iScanner.nextLine();
         if (!tempString.equals(employeePassword)) {
             System.out.println("Incorrect employee password.");
-        } else {
-            while (tempInt != 3) {
-                System.out.println("==========Employee Dashbord==========");
-                System.out.println("1. Modify Products");
-                System.out.println("2. Add Products");
-                System.out.println("3. exit");
-                tempInt = iScanner.nextInt();
-                switch (tempInt) {
-                    case 1:
-                        modifyProductsMenu();
-                        break;
-                    case 2:
-                        addProductMenu();
-                        break;
-
-                    default:
-                        tempInt = 3;
-                        break;
-                }
+        }
+        
+  else {
+    while (tempInt != 3) {
+        try {
+            System.out.println("==========Employee Dashboard==========");
+            System.out.println("1. Modify Products");
+            System.out.println("2. Add Products");
+            System.out.println("3. Exit");
+            tempInt = iScanner.nextInt();
+            switch (tempInt) {
+                case 1:
+                    modifyProductsMenu();
+                    break;
+                case 2:
+                    addProductMenu();
+                    break;
+                default:
+                    tempInt = 3;
+                    break;
             }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            iScanner.next(); // Clear the invalid input from the scanner
+        }
+    }
+}
+
         }
 
     }
