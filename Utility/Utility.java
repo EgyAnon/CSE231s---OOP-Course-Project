@@ -1,5 +1,7 @@
 package Utility;
+import java.util.InputMismatchException;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Utility {
   public static boolean isAllDigits(String s) {
@@ -11,6 +13,43 @@ public class Utility {
         return false;
     }
     return true;
+  }
+
+  public static int enforceIntReturn(){
+    int tempInt = 0;
+    Scanner input = new Scanner(System.in);
+    try{
+      tempInt = input.nextInt();
+      return tempInt;
+    }
+    catch(InputMismatchException ex){
+      System.out.println("Sorry, invalid input.");
+      return enforceIntReturn();
+    }
+  }
+  public static String enforceStringReturn(){
+    String tempString = "";
+    Scanner input = new Scanner(System.in);
+    try{
+      tempString = input.nextLine();
+      return tempString;
+    }
+    catch(InputMismatchException ex){
+      System.out.println("Sorry, invalid input.");
+      return enforceStringReturn();
+    }
+  }
+  public static double enforceDoubleReturn(){
+    double tempdouble = 0.0;
+    Scanner input = new Scanner(System.in);
+    try{
+      tempdouble = input.nextDouble();
+      return tempdouble;
+    }
+    catch(InputMismatchException ex){
+      System.out.println("Sorry, invalid input.");
+      return enforceDoubleReturn();
+    }
   }
 
   public static String getRandomString(int length) {

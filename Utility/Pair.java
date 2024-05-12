@@ -1,6 +1,6 @@
 package Utility;
 
-public class Pair<K, V> {
+public class Pair<K, V>{
     private K first;
     private V second;
   

@@ -1,123 +1,85 @@
-import Interfaces.*;
-import java.time.LocalDateTime;
 import Utility.*;
 
-@SuppressWarnings("unused")
-abstract class Item{
+abstract class Item implements Comparable<Item>{
+
     private String name;
-    private double unit_price;
-    private int available_quantity;
+    private double unitPrice;
+    private int availableQuantity;
     
+    @Override
+    public int compareTo(Item I){
+        if(this.unitPrice<I.getUnitPrice()) return -1;
+        else if(this.unitPrice>I.getUnitPrice()) return 1;
+        else return 0;
+    }
+
+    @Override
+    public String toString(){
+        String returnStr = this.name + "\t-\tprice: " + unitPrice + "\t-\t" + availableQuantity + " - units available.";
+        return returnStr;
+    }
     public String getName(){
         return name;
     }
-
+    public double getUnitPrice(){
+        return unitPrice;
+    }
     public int getAvailableQuantity(){
-        return available_quantity;
+        return availableQuantity;
     }
     public void removeQuantity(int quantity){
-        available_quantity-=quantity;
+        availableQuantity-=quantity;
     }
 
     public void addQuantity(int quantity){
-        available_quantity+=quantity;
+        availableQuantity+=quantity;
     }
 
     public Item(String name, double unit_price, int initialQuantity){
         this.name = name;
-        this.unit_price = unit_price;
-        this.available_quantity = initialQuantity;
+        this.unitPrice = unit_price;
+        this.availableQuantity = initialQuantity;
     }
     
     Item(){
         this("IPSUMLOREM",1,1);
     }
 
-    @Override
-    public String toString(){
-        String returnString = this.name + " - Available Quantity: " + this.available_quantity;
-        return returnString;
-    }
-
-    boolean check_availability(int requiredQuantity){
-        if(requiredQuantity<=available_quantity) return true;
+    boolean quantityAvailable(int requiredQuantity){
+        if(requiredQuantity<=availableQuantity) return true;
         else return false;
     }
 
     double calculate_price(double requiredQuantity){
-        return requiredQuantity * unit_price;
+        return requiredQuantity * unitPrice;
     }
 }
 
-abstract class Expirable extends Item{
-    LocalDateTime expiryDate;
-    Expirable(String ExpirableName,double unitPrice, int initialQuantity,
-    int expiryMonth, int expiryDay,int expiryHour, int expiryMinute){
-        super(ExpirableName,unitPrice,initialQuantity);
-        expiryDate = getCustomDate(expiryMonth,expiryDay,expiryHour,expiryMinute);
-    }
 
-    Expirable(String ExpirableName,double unitPrice, int initialQuantity,
-    int expiryMonth, int expiryDay){
-        super(ExpirableName,unitPrice,initialQuantity);
-        expiryDate = getCustomDate(expiryMonth,expiryDay,23,59);
-    }
-
-    @SuppressWarnings("static-access")
-    static LocalDateTime getCustomDate(int expiryMonth, int expiryDay, int expiryHour, int expiryMinute) {
-        LocalDateTime CustomDate = LocalDateTime.now();
-        CustomDate = CustomDate.of(CustomDate.getYear(), expiryMonth, expiryDay, expiryHour, expiryMinute);
-        return CustomDate;
-    }
-
-    String getExpiryDate(){
-        return expiryDate.toString();
-    }
-
-
-}
-
-class Food extends Expirable{
+class Food extends Item{
     
-    Food(String foodName,double unitPrice, int initialQuantity,
-    int expiryMonth, int expiryDay,int expiryHour, int expiryMinute){
-        super(foodName,unitPrice,initialQuantity,expiryMonth,expiryDay,expiryHour,expiryMinute);
+    Food(String foodName,double unitPrice, int initialQuantity)
+    {
+        super(foodName,unitPrice,initialQuantity);
     }
-
-    Food(String foodName,double unitPrice, int initialQuantity,
-    int expiryMonth, int expiryDay){
-        super(foodName,unitPrice,initialQuantity,expiryMonth,expiryDay);
-    }
-    Food(String foodName,double unitPrice, int initialQuantity){
-        super(foodName,unitPrice,initialQuantity,5,29);
-    }
+    
     Food(){ //create a random food item
-        this(Utility.getRandomString(10),Utility.getRandomPrice(),10,5,29);
+        this(Utility.getRandomString(10),Utility.getRandomPrice(),10);
     }
 }
 
 class Tool extends Item{
-    Tool(String foodName,double unitPrice, int initialQuantity){
-        super(foodName,unitPrice,initialQuantity);
+    Tool(String toolName,double unitPrice, int initialQuantity){
+        super(toolName,unitPrice,initialQuantity);
     }
     Tool(){ //create a random Tool item
         this(Utility.getRandomString(10),Utility.getRandomPrice(),10);
     }
 }
 
-class Cosmetic extends Expirable{
-    Cosmetic(String CosmeticName,double unitPrice, int initialQuantity,
-    int expiryMonth, int expiryDay,int expiryHour, int expiryMinute){
-        super(CosmeticName,unitPrice,initialQuantity,expiryMonth,expiryDay,expiryHour,expiryMinute);
-    }
-
-    Cosmetic(String CosmeticName,double unitPrice, int initialQuantity,
-    int expiryMonth, int expiryDay){
-        super(CosmeticName,unitPrice,initialQuantity,expiryMonth,expiryDay);
-    }
-
+class Cosmetic extends Item{
     Cosmetic(String CosmeticName,double unitPrice, int initialQuantity){    
-        this(CosmeticName, unitPrice, initialQuantity,12, 25,10,0);
+        super(CosmeticName, unitPrice, initialQuantity);
     }
     Cosmetic(){ //create a random Cosmetic item
         this(Utility.getRandomString(10),Utility.getRandomPrice(),10);
