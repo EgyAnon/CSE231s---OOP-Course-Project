@@ -18,10 +18,13 @@ public class Order {
             System.out.println("Your cart is empty.");
         }
         else{
+            System.out.println("ITEM NAME\t-\tQUANTITY\t-\tSUBTOTAL");
             for(Pair<Item,Integer> P : orderContent){
-                System.out.println(P.getFirst().getName() + " x" + P.getSecond());
+                System.out.println(P.getFirst().getName()+ "\t\t-\tx" + P.getSecond()+"\t-\t" + P.getSecond()*P.getFirst().getUnitPrice());
             }
-            System.out.println("----------Total Price = " + totalPrice + "----------");
+            System.out.println("----------Total Price = " + ((int)(totalPrice*10))/10.0 + "----------");
+
+            ShoppingSystem.printThanksMessage();
         }
 
     }

@@ -1,16 +1,29 @@
-import Interfaces.*;
 import Utility.*;
 
-@SuppressWarnings("unused")
-abstract class Item{
+abstract class Item implements Comparable<Item>{
+
     private String name;
     private double unitPrice;
     private int availableQuantity;
     
+    @Override
+    public int compareTo(Item I){
+        if(this.unitPrice<I.getUnitPrice()) return -1;
+        else if(this.unitPrice>I.getUnitPrice()) return 1;
+        else return 0;
+    }
+
+    @Override
+    public String toString(){
+        String returnStr = this.name + "\t-\tprice: " + unitPrice + "\t-\t" + availableQuantity + " - units available.";
+        return returnStr;
+    }
     public String getName(){
         return name;
     }
-
+    public double getUnitPrice(){
+        return unitPrice;
+    }
     public int getAvailableQuantity(){
         return availableQuantity;
     }
@@ -30,12 +43,6 @@ abstract class Item{
     
     Item(){
         this("IPSUMLOREM",1,1);
-    }
-
-    @Override
-    public String toString(){
-        String returnString = this.name + " - Available Quantity: " + this.availableQuantity;
-        return returnString;
     }
 
     boolean quantityAvailable(int requiredQuantity){
@@ -62,8 +69,8 @@ class Food extends Item{
 }
 
 class Tool extends Item{
-    Tool(String foodName,double unitPrice, int initialQuantity){
-        super(foodName,unitPrice,initialQuantity);
+    Tool(String toolName,double unitPrice, int initialQuantity){
+        super(toolName,unitPrice,initialQuantity);
     }
     Tool(){ //create a random Tool item
         this(Utility.getRandomString(10),Utility.getRandomPrice(),10);
@@ -71,8 +78,6 @@ class Tool extends Item{
 }
 
 class Cosmetic extends Item{
-
-
     Cosmetic(String CosmeticName,double unitPrice, int initialQuantity){    
         super(CosmeticName, unitPrice, initialQuantity);
     }
