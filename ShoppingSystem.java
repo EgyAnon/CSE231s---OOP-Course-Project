@@ -2,18 +2,59 @@ import java.util.*;
 import Utility.Utility;
 
 public class ShoppingSystem {
+   /**
+     * Stores the pre-defined employee password for employee login.
+     */
     private static final String employeePassword = "password";
+
+    /**
+     *  HashMap to store items in the warehouse, with item name as the key and the Item object itself as the value.
+     */
     private HashMap<String, Item> warehouse;
-    private double tempDouble;
-    private String tempString;
-    private int tempInt;
+
+    /**
+     * HashMap to store customers, with customer name as the key and the Customer object itself as the value.
+     */
+    private HashMap<String, Customer> customerMap;
+
+    /**
+     * A reference to the current customer object interacting with the system.
+     */
+    private Customer currentCustomer;
+
+    /**
+     * A reference to the current order being placed by the customer.
+     */
     private Order currentOrder;
-    
+
+    /**
+     * Temporary integer variable used throughout the code for various purposes.
+     */
+    private int tempInt;
+
+    /**
+     * Temporary string variable used throughout the code for various purposes.
+     */
+    private String tempString;
+
+    /**
+     * Temporary double variable used throughout the code for various purposes.
+     */
+    private double tempDouble;
+
+    /**
+     * Default constructor that initializes the warehouse and customer map.
+     */
     public ShoppingSystem() {
         warehouse = new HashMap<String, Item>();
+        customerMap = new HashMap<String, Customer>();
         tempInt = 0;
         InitializeWarehouse();
     }
+
+    /**
+     * Populates the warehouse with various pre-defined Food, Tool, and Cosmetic items.
+     */
     private void InitializeWarehouse() {
         // ====================Food================//
         warehouse.put("apple", new Food("apple", Utility.getRandomPrice(), 5));
@@ -49,13 +90,13 @@ public class ShoppingSystem {
         warehouse.put("foundation", new Cosmetic("foundation", Utility.getRandomPrice(), 15));
         warehouse.put("eyeshadow", new Cosmetic("eyeshadow", Utility.getRandomPrice(), 8));
     }
-    
+
     public void RunSystem() {
         boolean continueOperation = true;
         System.out.println("\t\tWelcome to the Online Shopping System");
         System.out.print("Enter 1 to continue, any other number to terminate: ");
         tempInt = Utility.enforceIntReturn();
-        if(tempInt != 1){
+        if (tempInt != 1) {
             printThanksMessage();
             System.exit(0);
         }
@@ -65,14 +106,48 @@ public class ShoppingSystem {
             System.out.println("\t1.Customer\n\t2.Employee\n\t3.exit");
             tempInt = Utility.enforceIntReturn();
 
-            if (tempInt == 1)
-                customerMenu();
-            else if (tempInt == 2)
-                EmployeeMenu();
-            else if (tempInt == 3)
-                continueOperation = false;
-            else
-                printErrorMessage();
+            switch (tempInt) {
+                case 1:
+                    System.out.print("Enter Your name please: ");
+                    tempString = Utility.enforceStringReturn();
+                    if (customerMap.containsKey(tempString))
+                        currentCustomer = customerMap.get(tempString);
+                    
+                    else {
+                        currentCustomer = new Customer(tempString);
+                        customerMap.put(tempString,currentCustomer);
+                    }
+                    System.out.println("Hello! " + currentCustomer.getName());
+                    System.out.println("Enter 1 to continue to shop, 2 to print your preview orders");
+                    tempInt = Utility.enforceIntReturn();
+                    switch (tempInt) {
+                        case 1:
+                        customerMenu();
+                            break;
+                        case 2:
+                        currentCustomer.printOrderHistory();
+                        break;
+
+                        default:
+                        printErrorMessage();
+                        break;
+                    }
+                    
+                    break;
+
+                case 2:
+                    EmployeeMenu();
+                    break;
+
+                case 3:
+                    continueOperation = false;
+                    break;
+
+                default:
+                    printErrorMessage();
+                    break;
+            }
+
         }
         System.out.println("Thank you for using our online shopping system.");
     }
@@ -98,6 +173,7 @@ public class ShoppingSystem {
             }
         }
     }
+
     private void EmployeeMenu() {
         System.out.println("Enter employee password");
         tempString = Utility.enforceStringReturn();
@@ -128,6 +204,7 @@ public class ShoppingSystem {
         }
 
     }
+
     private void modifyProductsMenu() {
         boolean continueModification = true;
         while (continueModification) {
@@ -145,6 +222,7 @@ public class ShoppingSystem {
             }
         }
     }
+
     private void addProductMenu() {
         int switchInt;
         System.out.print("What type of product to you wish to add?\n\t1.Food\n\t2.Tools\n\t3.Cosmetics\n");
@@ -166,16 +244,17 @@ public class ShoppingSystem {
         switch (switchInt) {
             case 1:
                 Item I = new Food(tempString, tempDouble, tempInt);
-                addProduct(warehouse, I);
+                addProduct(I);
                 break;
 
             case 2:
                 I = new Tool(tempString, tempDouble, tempInt);
+                addProduct(I);
                 break;
 
             case 3:
                 I = new Cosmetic(tempString, tempDouble, tempInt);
-                addProduct(warehouse, I);
+                addProduct(I);
                 break;
 
             default:
@@ -183,31 +262,52 @@ public class ShoppingSystem {
                 break;
         }
     }
-    private void addProduct(HashMap<String, Item> itemMap, Item I) {
-        if (itemMap.containsKey(I.getName())) {
-            itemMap.get(I.getName()).addQuantity(I.getAvailableQuantity());
-            System.out.println("Quantity updated to " + itemMap.get(I.getName()).getAvailableQuantity());
+
+    private void addProduct(Item I) {
+        if (warehouse.containsKey(I.getName())) {
+            warehouse.get(I.getName()).addQuantity(I.getAvailableQuantity());
+            System.out.println("Quantity updated to " + warehouse.get(I.getName()).getAvailableQuantity());
         } else {
-            itemMap.put(I.getName(), I);
+            warehouse.put(I.getName(), I);
             System.out.println("Item: " + I.getName() + " Added Successfully");
         }
     }
+
     private void customerMenu() {
         currentOrder = new Order();
+        menuNavigate();
         while (tempInt != 0) {
-            menuNavigate();
-            System.out.println("Enter 1 to continue, 0 to finish your order:");
+            System.out.println("Enter 1 to continue, 2 to print your order, or 0 to finish:");
             tempInt = Utility.enforceIntReturn();
+            switch (tempInt) {
+                case 1:
+                    menuNavigate();
+                    break;
+
+                case 2:
+                    currentOrder.printOrder();
+                    break;
+
+                case 0:
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.");
+                    break;
+            }
         }
-        currentOrder.printOrder();
-        currentOrder = null;    //freeing memory
-    } 
+        currentOrder.finishOrder(currentCustomer);
+        currentOrder = null; // freeing memory
+    }
+
     private static void printErrorMessage() {
         System.out.println("Invalid input. Please try again.");
     }
+
     private static void printThanksMessage() {
         System.out.println("Thank you for using our shopping system.");
     }
+
     private void smartPrint() {
         List<Item> values = new ArrayList<Item>(warehouse.values());
         Collections.sort(values);
@@ -229,4 +329,3 @@ public class ShoppingSystem {
         }
     }
 }
-
