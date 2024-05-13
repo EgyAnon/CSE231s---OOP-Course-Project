@@ -1,7 +1,8 @@
 import Utility.*;
 
+@SuppressWarnings("unused")
 abstract class Item implements Comparable<Item>{
-
+    
     private String name;
     private double unitPrice;
     private int availableQuantity;
@@ -30,27 +31,22 @@ abstract class Item implements Comparable<Item>{
     public void removeQuantity(int quantity){
         availableQuantity-=quantity;
     }
-
     public void addQuantity(int quantity){
         availableQuantity+=quantity;
     }
-
     public Item(String name, double unit_price, int initialQuantity){
         this.name = name;
         this.unitPrice = unit_price;
         this.availableQuantity = initialQuantity;
     }
-    
-    Item(){
+    private Item(){
         this("IPSUMLOREM",1,1);
     }
-
-    boolean quantityAvailable(int requiredQuantity){
+    public boolean quantityIsAvailable(int requiredQuantity){
         if(requiredQuantity<=availableQuantity) return true;
         else return false;
     }
-
-    double calculate_price(double requiredQuantity){
+    public double calculatePrice(int requiredQuantity){
         return requiredQuantity * unitPrice;
     }
 }
