@@ -1,3 +1,10 @@
+/**
+* @description a simple data structures that allows us to pair two entities together 
+* @author Ahmed Karam - ID: 210176
+* @author Ahmed Haitham - ID: 2101629
+**/
+
+
 package Utility;
 public class Pair<K, V>{
     private K first;

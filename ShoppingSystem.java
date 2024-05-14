@@ -1,32 +1,32 @@
+/*
+* @author Ahmed Haitham - ID: 2101629
+* @author Ahmed Karam - ID: 2101767
+*/
+
 import java.util.*;
-import Utility.Utility;
+import Utility.Utility; //importing our utility package
 
 public class ShoppingSystem {
    /**
      * Stores the pre-defined employee password for employee login.
      */
     private static final String employeePassword = "password";
-
     /**
      *  HashMap to store items in the warehouse, with item name as the key and the Item object itself as the value.
      */
     private HashMap<String, Item> warehouse;
-
     /**
      * HashMap to store customers, with customer name as the key and the Customer object itself as the value.
      */
     private HashMap<String, Customer> customerMap;
-
     /**
      * A reference to the current customer object interacting with the system.
      */
     private Customer currentCustomer;
-
     /**
      * A reference to the current order being placed by the customer.
      */
     private Order currentOrder;
-
     /**
      * Temporary integer variable used throughout the code for various purposes.
      */

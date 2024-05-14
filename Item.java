@@ -1,16 +1,15 @@
 import Utility.*;
-
 /**
  * This abstract class represents an item in a shopping store. It inherits from `ShoppingStoreEntity` (which we assume provides basic functionality for entities)
  * and implements the `Comparable` interface to enable sorting items based on specific criteria.
- */
+ * @author Ahmed Karam - ID: 210176
+ * @author Ahmed Haitham - ID: 2101629
+ **/
 abstract class Item extends ShoppingStoreEntity implements Comparable<Item> {
-
     /**
      * Stores the unit price of the item.
      */
     private double unitPrice;
-
     /**
      * Stores the current available quantity of the item in stock.
      */
